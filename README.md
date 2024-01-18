@@ -3,12 +3,13 @@ Just trying to play around Dockerfiles, Docker Compose, Python Paho Mqtt, and Ec
 
 ## To run and initialize the project do
 ```bash
-docker compose up docker-compose.yml --build -d
+$ chmod u+x run_proj_init.sh
+$ ./run_proj_init.sh
 ```
 
 ## Play with MQTT with Debian Containers
 
-### Build the Debuian Image
+### Build the Debian Image
 
 ```bash
 docker build -t debian-machine -f Dockerfile.vm .
