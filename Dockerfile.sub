@@ -1,0 +1,15 @@
+FROM python:3.11.7-slim-bookworm
+
+ENV MQTT_TOPIC="default-topic"
+
+COPY ./requirements.txt /app/
+COPY ./subscriber.py /app/
+
+# RUN apt-get update -y && \
+#     apt-get install mosquitto mosquitto-clients -y
+
+WORKDIR /app
+
+RUN pip3 install -r ./requirements.txt
+
+CMD python3 -B ./subscriber.py $MQTT_TOPIC

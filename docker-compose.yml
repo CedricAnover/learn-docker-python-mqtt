@@ -1,0 +1,42 @@
+version: '3'
+
+networks:
+  mqtt_net:
+    name: mqtt-net  # This is just the network instance name.
+    driver: bridge
+
+services:
+  mqtt:  # This can be referenced as the hostname for the container
+    image: eclipse-mosquitto:latest
+    container_name: mqtt-container  # This is just the container instance name.
+    networks:
+      - mqtt_net
+    expose:
+      - "1883"
+      - "9001"
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+
+  subscriber:
+      build:
+        context: .  # Build Context
+        dockerfile: ./Dockerfile.sub
+      container_name: subscriber-container
+      networks:
+        - mqtt_net
+      depends_on:
+        - mqtt
+      volumes:
+        - ./messages:/messages/
+
+  publisher:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.pub
+    container_name: publisher-container
+    networks:
+      - mqtt_net
+    depends_on:
+      - mqtt
